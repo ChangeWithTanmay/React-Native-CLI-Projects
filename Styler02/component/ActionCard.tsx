@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Linking, Image } from 'react-native'
+import { StyleSheet, Text, View, Linking, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 
 export default function ActionCard() {
@@ -7,7 +7,7 @@ export default function ActionCard() {
     }
   return (
     <View>
-      <Text style={styles.headingText}>Blog Card</Text>
+      <Text style={styles.headingText}>Blogl Card</Text>
       <View style={[styles.card, styles.elevatedCard]}>
         <View style={styles.headingContainer}>
             <Text style={styles.headerText}>
@@ -20,6 +20,21 @@ export default function ActionCard() {
         }}
         style={styles.cardImage}
         />
+        <View style={styles.bodyContainer}>
+          <Text numberOfLines={3}>If your app is linked against an earlier version of iOS but is running in iOS 9.0 or later, you can call this method up to 50 times. After reaching that limit, subsequent calls always resolve to false. If the user reinstalls or upgrades the app, iOS resets the limit.</Text>
+        </View>
+        <View style={styles.footerContainer}>
+        <TouchableOpacity
+            onPress={()=> openWebsite('https://reactnative.dev/docs/touchableopacity#example')}
+          >
+            <Text style={styles.sociaLiks}>Read More</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={()=> openWebsite('https://www.instagram.com/pure.eats.orginal/')}
+          >
+            <Text style={styles.sociaLiks}>Follow me</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )
@@ -27,11 +42,56 @@ export default function ActionCard() {
 
 const styles = StyleSheet.create({
     headingText:{
-
+      fontSize: 24,
+      fontWeight: 'bold',
+      paddingHorizontal: 8
     },
-    card: {},
-    elevatedCard: {},
-    headingContainer: {},
-    headerText: {},
-    cardImage: {}
+    card: {
+      width: 340,
+      height: 360,
+      borderRadius: 6,
+      marginVertical: 12,
+      marginHorizontal: 10
+    },
+    elevatedCard: {
+      backgroundColor: '#E07C24',
+      elevation: 3,
+      shadowOffset: {
+        width: 1,
+        height: 1
+      },
+      shadowColor: '#333',
+      shadowOpacity: 0.4
+    },
+    headingContainer: {
+      height: 40,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    headerText: {
+      color: '#00000',
+      fontSize: 16,
+      fontWeight: '600'
+    },
+    cardImage: {
+      height: 160,
+    },
+    bodyContainer: {
+      padding: 10
+    },
+    footerContainer: {
+      padding: 8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-evenly'
+    },
+    sociaLiks: {
+      fontSize: 14,
+      color: '#000000',
+      backgroundColor: '#FFFFFF',
+      paddingHorizontal: 20,
+      paddingVertical: 6,
+      borderRadius: 6
+    }
 })
