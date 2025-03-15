@@ -5,10 +5,10 @@
 
 #### Yup is a npm package, to help big project. That is use for Validation. 
 
-1. This package are very common use podaction grade project.
+1. This package are very common use podaction grade project..
 
 ##### wey 1
-```
+```javascript
 import * as Yup from 'yup';
 
 const PasswordSchema = Yup.object().shape({
@@ -20,7 +20,7 @@ const PasswordSchema = Yup.object().shape({
 ```
 
 ##### wey 2
-```
+```javascript
 import { object, string, number, date, InferType } from 'yup';
 
 let userSchema = object({
@@ -31,3 +31,10 @@ let userSchema = object({
   createdOn: date().default(() => new Date()),
 });
 ```
+#### Formik
+
+Create a Form in React\ReactNative-CLI project. Oviusly use this NPM package.
+
+#### react-native-bouncy-checkbox
+
+It is a very populer Libery, Usecase is add bouncy box in your app.
