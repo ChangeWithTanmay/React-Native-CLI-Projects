@@ -15,7 +15,25 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("com.google.gms:google-services:4.4.2")
     }
 }
 
 apply plugin: "com.facebook.react.rootproject"
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion  // Use version from ext
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "com.styler02" // Your application ID
+        minSdkVersion rootProject.ext.minSdkVersion  // Use version from ext
+        targetSdkVersion rootProject.ext.targetSdkVersion  // Use version from ext
+        versionCode 1
+        versionName "1.0"
+    }
+
+    // Other configurations...
+}

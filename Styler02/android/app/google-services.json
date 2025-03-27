@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "308172707904",
+    "project_id": "doctor-appiont-book",
+    "storage_bucket": "doctor-appiont-book.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308172707904:android:8c68082d7a0369aee067a5",
+        "android_client_info": {
+          "package_name": "com.styler02"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "308172707904-8v48vpf3ed6q97vopfdiusad44qntfp7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWyKN89Nb2Q881onhjBxEQak8eSSP7Za0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "308172707904-8v48vpf3ed6q97vopfdiusad44qntfp7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
