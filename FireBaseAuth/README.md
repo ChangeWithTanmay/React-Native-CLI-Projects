@@ -227,3 +227,256 @@ dependencies {
 }
 
 ```
+
+## Just Email Signup
+
+```SignUpScreen.js``` All code Add this file.
+
+```javascript
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "your-api-key",
+  authDomain: "your-auth-domain",
+  projectId: "your-project-id",
+  storageBucket: "your-storage-bucket",
+  messagingSenderId: "your-messaging-sender-id",
+  appId: "your-app-id",
+};
+
+
+// Initialize Firebase app
+const app = initializeApp(firebaseConfig);
+
+// Correct initialization with persistence using AsyncStorage
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage), // Use AsyncStorage for persistence
+});
+
+// SignUpScreen Component
+const SignUpScreen = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onRegister = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        Alert.alert(`User account created & signed in! \n \n ${userCredential.user.email}`);
+      })
+      .catch((error) => {
+        Alert.alert(`Error: ${error.message} \n Please check email and password.`);
+      });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.signup}>Sign Up Screen</Text>
+      <TextInput
+        placeholder="Email"
+        style={styles.inputBox}
+        value={email}
+        onChangeText={(value) => setEmail(value)}
+      />
+      <TextInput
+        placeholder="Password"
+        style={styles.inputBox}
+        value={password}
+        onChangeText={(value) => setPassword(value)}
+        secureTextEntry
+      />
+      <TouchableOpacity onPress={onRegister} style={styles.register}>
+        <Text style={styles.registerTitle}>Register</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default SignUpScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
+  inputBox: {
+    borderWidth: 1,
+    borderColor: 'grey',
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    width: '90%',
+    marginTop: 20,
+  },
+  register: {
+    width: '90%',
+    backgroundColor: '#FCAF03',
+    padding: 12,
+    borderRadius: 30,
+    borderWidth: 1.1,
+    borderColor: '#d9a002',
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  registerTitle: {
+    fontSize: 16,
+    color: '#000000',
+    fontWeight: '600',
+  },
+  signup: {
+    fontSize: 24,
+    color: '#000000',
+    fontWeight: 'bold',
+    marginBottom: 80,
+  },
+});
+
+```
+
+## Old wey vs New Wey.
+To help you understand the difference between the **old version** and the **new version** of Firebase Authentication (especially for React Native), I'll summarize the changes and how things are handled differently between the two versions.
+
+### **Old Version of Firebase Authentication for React Native**
+
+In the older versions of Firebase Authentication (before Firebase v9 and v10), React Native used to rely on the Firebase SDK directly with no modular imports. Here's how things were typically set up in the past:
+
+1. **Initialization**:
+   - Firebase was initialized using the `firebase` object directly without splitting the modules into different parts.
+   
+2. **Persistence**:
+   - In the old way, persistence was handled by default, with Firebase using memory persistence for authentication state. You could optionally set persistence manually by using `@react-native-firebase/auth`, but it was less modular, and it wasn’t as configurable as in the newer versions.
+
+3. **Firebase Authentication Setup**:
+   - The code used the Firebase package directly, like this:
+
+   ```javascript
+   import firebase from 'firebase/app';
+   import 'firebase/auth';
+   
+   // Firebase config and app initialization
+   const firebaseConfig = {
+     apiKey: 'your-api-key',
+     authDomain: 'your-auth-domain',
+     projectId: 'your-project-id',
+     storageBucket: 'your-storage-bucket',
+     messagingSenderId: 'your-messaging-sender-id',
+     appId: 'your-app-id',
+   };
+
+   if (!firebase.apps.length) {
+     firebase.initializeApp(firebaseConfig);
+   } else {
+     firebase.app(); // Use the default app
+   }
+   ```
+
+4. **Error Handling**:
+   - Errors were caught in a `.catch()` method and handled directly.
+
+### **New Version of Firebase Authentication (Firebase SDK v9 and above)**
+
+In the new Firebase SDK versions (v9 and later, including Firebase 11.5.0), Firebase moved to a **modular** approach. This means you import only the parts of Firebase that you need, making the SDK smaller and more efficient, especially for React Native.
+
+Here’s a summary of the changes:
+
+1. **Modular Imports**:
+   - You no longer import everything from `firebase`. Instead, you import only the functions that you need. This helps reduce the size of the application.
+   
+   Example of Firebase Authentication initialization with modular imports:
+
+   ```javascript
+   import { initializeApp } from 'firebase/app';
+   import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+   
+   const firebaseConfig = {
+     apiKey: 'your-api-key',
+     authDomain: 'your-auth-domain',
+     projectId: 'your-project-id',
+     storageBucket: 'your-storage-bucket',
+     messagingSenderId: 'your-messaging-sender-id',
+     appId: 'your-app-id',
+   };
+
+   // Initialize Firebase
+   const app = initializeApp(firebaseConfig);
+   const auth = getAuth(app);
+   ```
+
+2. **Persistence Configuration**:
+   - Firebase SDK v9+ introduced explicit persistence handling. To persist user authentication across sessions, you need to configure it explicitly, and it now uses **AsyncStorage** or other persistence options.
+   
+   Example of configuring persistence:
+
+   ```javascript
+   import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
+   import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+   import { getReactNativePersistence } from 'firebase/auth';
+   
+   const auth = getAuth(app);
+
+   // Setting persistence
+   setPersistence(auth, getReactNativePersistence(ReactNativeAsyncStorage))
+     .then(() => {
+       console.log('Persistence set!');
+     })
+     .catch((error) => {
+       console.error('Error setting persistence:', error);
+     });
+   ```
+
+   **In the new version**:
+   - You need to call `setPersistence` explicitly to store the authentication state in **AsyncStorage** or in a browser-like local storage on mobile.
+   - Firebase Authentication will default to memory persistence if you don't configure it.
+
+3. **Authentication Methods**:
+   - In the new version, authentication methods like `createUserWithEmailAndPassword` are available through modular functions, not directly under the `firebase` object.
+
+   ```javascript
+   import { createUserWithEmailAndPassword } from 'firebase/auth';
+   
+   createUserWithEmailAndPassword(auth, email, password)
+     .then((userCredential) => {
+       console.log('User created:', userCredential.user);
+     })
+     .catch((error) => {
+       console.error('Error:', error.message);
+     });
+   ```
+
+4. **Error Handling**:
+   - Error handling remains largely the same, but since the new version uses promises and `async/await`, you can handle errors more cleanly with `try/catch` in async functions.
+
+   ```javascript
+   try {
+     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+     console.log('User created:', userCredential.user);
+   } catch (error) {
+     console.error('Error:', error.message);
+   }
+   ```
+
+### **Key Differences Between the Old and New Versions**:
+
+| **Aspect**              | **Old Version**                                         | **New Version**                                              |
+|-------------------------|---------------------------------------------------------|-------------------------------------------------------------|
+| **Imports**             | `import firebase from 'firebase/app';`                 | Modular imports: `import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';` |
+| **Firebase Initialization** | `firebase.initializeApp(config)`                    | `initializeApp(config)`                                     |
+| **Authentication Setup** | Uses `firebase.auth()`                                 | `getAuth(app)`                                              |
+| **Persistence Handling**  | Default memory persistence (optional configuration)    | Explicit persistence configuration with `setPersistence` and `getReactNativePersistence` |
+| **Size**                 | Includes entire Firebase SDK by default               | Smaller app size since only required parts are imported    |
+| **Error Handling**      | `.catch()` for handling errors                        | `async/await` and `try/catch` are used for error handling   |
+
+### **Conclusion**:
+
+- **Old Version**: Firebase was initialized with a single import and persistence was either default or configured in a less modular way.
+- **New Version**: Firebase has moved to a modular architecture, requiring you to import only the necessary parts. Persistence is more explicitly handled, and Firebase Authentication can be more efficiently set up for React Native apps.
+
+For the best performance and to keep up with new features, it's recommended to use the **new modular SDK (v9 and above)** for Firebase in React Native.
+
+Let me know if you have more questions or need further clarification!
